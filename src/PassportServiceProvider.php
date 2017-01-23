@@ -221,7 +221,7 @@ class PassportServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the resource server.
+     * Get the public key or a path where the key is located
      *
      * @return String
      */
