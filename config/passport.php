@@ -9,6 +9,9 @@ return [
     |
     | Put your oauth private/public key here. They are generated during installation with
     | 
+    | $# php artisan passport:keys
+    | 
+    | 
     | 'oauthPrivateKey' => '-----BEGIN RSA PRIVATE KEY-----
     | MIIJJwIBAAKCAgEA10uZbrzdwhPudOrifM4C7maBiaLKCITnBwqvj+nijR2xF3WF
     | .....SOME MORE LINES ......
@@ -18,13 +21,44 @@ return [
     | 
     | It is also possible to put a path here
     | 'oauthPrivateKey' => 'file://path/to/your/oauth-private.key',
-    | 'oauthPrivateKey' => 'file://'.storage_path('config/oauth-private.key'),
+    |   OR
+    | 'oauthPrivateKey' => 'file://'.config_path('oauth-private.key'),
+    |   OR
+    | 'oauthPrivateKey' => 'file://'.storage_path('oauth-private.key'),
     |
     | To convert your key to one line env variable use this command :
     | awk '{printf "%s\\n", $0}' oauth-private.key
     | 
     */
 
-    //'oauthPrivateKey' => '',
-    //'oauthPublicKey' => '',
+/*
+    // WORKING
+    'oauthPrivateKey' => 'file://'.config_path('oauth-private.key'),
+    'oauthPublicKey' => 'file://'.config_path('oauth-public.key'),
+
+    // CRURRENTLY NOT WORKING
+    'oauthPrivateKey' => '-----BEGIN RSA PRIVATE KEY-----
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXX/
+
+      SNIP
+                   /XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+-----END RSA PRIVATE KEY-----',
+
+
+
+    'oauthPublicKey' => '-----BEGIN PUBLIC KEY-----
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXX/
+
+      SNIP
+                   /XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==
+-----END PUBLIC KEY-----',
+*/
+
 ];
