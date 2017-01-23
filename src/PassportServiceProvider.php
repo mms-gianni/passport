@@ -195,23 +195,24 @@ class PassportServiceProvider extends ServiceProvider
      */
     public function makeAuthorizationServer()
     {
-        if (isset(config('passport.oauthPrivateKey'))) {
+        if (config('passport.oauthPrivateKey') !== null ) {
             $privateKey = config('passport.oauthPrivateKey');
         } else {
             $privateKey = 'file://'.Passport::keyPath('oauth-private.key');
         }
 
-        if (isset(config('passport.oauthPublicKey'))) {
+        if (config('passport.oauthPublicKey') !== null ) {
             $publicKey = config('passport.oauthPublicKey');
         } else {
             $publicKey = 'file://'.Passport::keyPath('oauth-public.key');
         }
+
         return new AuthorizationServer(
             $this->app->make(Bridge\ClientRepository::class),
             $this->app->make(Bridge\AccessTokenRepository::class),
             $this->app->make(Bridge\ScopeRepository::class),
             $privateKey,
-            $publicKey)
+            $publicKey
         );
     }
 
@@ -222,7 +223,7 @@ class PassportServiceProvider extends ServiceProvider
      */
     protected function registerResourceServer()
     {
-        if (isset(config('passport.oauthPublicKey'))) {
+        if (config('passport.oauthPublicKey') !== null ) {
             $publicKey = config('passport.oauthPublicKey');
         } else {
             $publicKey = 'file://'.Passport::keyPath('oauth-public.key');
@@ -230,7 +231,7 @@ class PassportServiceProvider extends ServiceProvider
         $this->app->singleton(ResourceServer::class, function () {
             return new ResourceServer(
                 $this->app->make(Bridge\AccessTokenRepository::class),
-                $publicKey)
+                $publicKey
             );
         });
     }
