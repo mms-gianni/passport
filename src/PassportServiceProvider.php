@@ -195,25 +195,45 @@ class PassportServiceProvider extends ServiceProvider
      */
     public function makeAuthorizationServer()
     {
+        return new AuthorizationServer(
+            $this->app->make(Bridge\ClientRepository::class),
+            $this->app->make(Bridge\AccessTokenRepository::class),
+            $this->app->make(Bridge\ScopeRepository::class),
+            $this->getPrivateKey(),
+            $this->getPublicKey()
+        );
+    }
+
+    /**
+     * Get the private key or a path where the key is located
+     *
+     * @return String
+     */
+    private function getPrivateKey()
+    {
         if (config('passport.oauthPrivateKey') !== null ) {
             $privateKey = config('passport.oauthPrivateKey');
         } else {
             $privateKey = 'file://'.Passport::keyPath('oauth-private.key');
         }
 
+        return $privateKey;
+    }
+
+    /**
+     * Register the resource server.
+     *
+     * @return String
+     */
+    private function getPublicKey()
+    {
         if (config('passport.oauthPublicKey') !== null ) {
             $publicKey = config('passport.oauthPublicKey');
         } else {
             $publicKey = 'file://'.Passport::keyPath('oauth-public.key');
         }
 
-        return new AuthorizationServer(
-            $this->app->make(Bridge\ClientRepository::class),
-            $this->app->make(Bridge\AccessTokenRepository::class),
-            $this->app->make(Bridge\ScopeRepository::class),
-            $privateKey,
-            $publicKey
-        );
+        return $publicKey;
     }
 
     /**
@@ -231,7 +251,7 @@ class PassportServiceProvider extends ServiceProvider
         $this->app->singleton(ResourceServer::class, function () {
             return new ResourceServer(
                 $this->app->make(Bridge\AccessTokenRepository::class),
-                $publicKey
+                $this->getPublicKey()
             );
         });
     }
